@@ -5,7 +5,17 @@
     <file url="file://$PROJECT_DIR$/01_Spring_Core/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/02_Spring_Bean_Life_Cycle/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/02_Spring_Bean_Life_Cycle/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/03_Spring_Dependency-Injection/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/03_Spring_Dependency-Injection/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/03_Spring_Dependency_Injection/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/03_Spring_Dependency_Injection/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/04_Spring_FullMode_vs_LightMode/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/04_Spring_FullMode_vs_LightMode/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/05_Spring_Configuration/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/05_Spring_Configuration/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/06_Spring_Runtime_Value_Injection/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/06_Spring_Runtime_Value_Injection/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/07_Spring_Environment/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/07_Spring_Environment/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/08_Spring_Web_MVC/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/08_Spring_Web_MVC/src/main/resources" charset="UTF-8" />
   </component>
 </project>
