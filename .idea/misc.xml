@@ -13,7 +13,14 @@
         <option value="$PROJECT_DIR$/07_Spring_Environment/pom.xml" />
         <option value="$PROJECT_DIR$/08_Spring_Web_MVC/pom.xml" />
         <option value="$PROJECT_DIR$/09_Reset_Controller/pom.xml" />
+        <option value="$PROJECT_DIR$/10_Backend/pom.xml" />
+        <option value="$PROJECT_DIR$/11_Frontend/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/11_Frontend/pom.xml" />
+      </set>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="17" project-jdk-type="JavaSDK">
