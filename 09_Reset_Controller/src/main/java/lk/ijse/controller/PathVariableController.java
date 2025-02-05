@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("variable")
 public class PathVariableController {
 
-    @GetMapping(path = "{id:[I][0-9]{3}}")  // This may be ambiguous with the below variable2 method.
+    @GetMapping(path = "{id:[I][0-9]{3}}")  // This may be ambiguous with the below variable2 method.Those are the same mapping type.
     public String variable1(@PathVariable("id") String id) {
         return id;
     }
