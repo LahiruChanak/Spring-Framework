@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="07_Spring_Environment" />
+        <module name="09_Reset_Controller" />
         <module name="05_Spring_Configuration" />
         <module name="08_Spring_Web_MVC" />
         <module name="06_Spring_Runtime_Value_Injection" />
