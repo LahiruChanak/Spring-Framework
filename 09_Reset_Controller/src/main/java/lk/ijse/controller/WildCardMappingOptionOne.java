@@ -10,6 +10,6 @@ public class WildCardMappingOptionOne {
 
     @GetMapping(path = "test/*/hello")  // any value can be passed to the * place.
     public String test(){
-        return "Get Mapping for test";
+        return "Get Mapping for Wild Card Mapping Option One";
     }
 }
