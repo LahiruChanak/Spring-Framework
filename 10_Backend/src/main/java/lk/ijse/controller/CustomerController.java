@@ -34,6 +34,7 @@ public class CustomerController {
                 existingCustomer.setName(customerDTO.getName());
                 existingCustomer.setAddress(customerDTO.getAddress());
                 existingCustomer.setAge(customerDTO.getAge());
+                existingCustomer.setProfilePic(customerDTO.getProfilePic());
                 return customerDTO;
             }
         }
