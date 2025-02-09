@@ -5,7 +5,7 @@ const BASE_URL =
 $(document).ready(function () {
   initializeProfilePicture();
   loadCustomers();
-  $("#id").val(generateCustomerId());
+  updateNextCustomerId()
 
   // Initialize form submissions
   $("#customerForm").on("submit", function (e) {
@@ -72,22 +72,22 @@ function handleImageSelection(event, previewId) {
   }
 }
 
-// Preview image helper function
-function previewImage(file, previewId) {
-  const reader = new FileReader();
-  reader.onload = function (e) {
-    $(`#${previewId}`).attr("src", e.target.result);
-    if (previewId === "editProfilePreview") {
-      $(".remove-image-btn").show();
-    }
-  };
-  reader.readAsDataURL(file);
-}
+// // Preview image helper function
+// function previewImage(file, previewId) {
+//   const reader = new FileReader();
+//   reader.onload = function (e) {
+//     $(`#${previewId}`).attr("src", e.target.result);
+//     if (previewId === "editProfilePreview") {
+//       $(".remove-image-btn").show();
+//     }
+//   };
+//   reader.readAsDataURL(file);
+// }
 
 // Save customer
 function saveCustomer() {
   const customerData = {
-    id: $("#id").val(),
+    id: $("#id").val(), // Use the ID displayed in the input field
     name: $("#name").val(),
     address: $("#address").val(),
     age: $("#age").val(),
@@ -105,9 +105,10 @@ function saveCustomer() {
     data: JSON.stringify(customerData),
     success: function () {
       showAlert("success", "Customer saved successfully");
+
+      // Reset the form and reload the customers
       resetForm();
       loadCustomers();
-      $("#id").val(generateCustomerId());
     },
     error: function (xhr) {
       showAlert("error", "Error saving customer: " + xhr.responseText);
@@ -148,6 +149,7 @@ function loadCustomers() {
 
       // Attach event handlers to new buttons
       attachButtonHandlers();
+      updateNextCustomerId();
     },
     error: function (xhr) {
       showAlert("error", "Error loading customers: " + xhr.responseText);
@@ -272,13 +274,16 @@ function validateCustomerData(data) {
   return true;
 }
 
-function generateCustomerId() {
+// Update the next customer ID in the input field
+function updateNextCustomerId() {
   const lastRow = $("#customerTable tr:last");
-  if (lastRow.length === 0) return "C001";
-
-  const lastId = lastRow.find("td:eq(1)").text();
-  const num = parseInt(lastId.substring(1)) + 1;
-  return `C${String(num).padStart(3, "0")}`;
+  if (lastRow.length === 0) {
+    $("#id").val("C001"); // If no rows exist, start with C001
+    return;
+  }
+  const lastId = lastRow.find("td:eq(1)").text(); // Get the last ID from the table
+  const num = parseInt(lastId.substring(1)) + 1; // Extract numeric part and increment
+  $("#id").val(`C${String(num).padStart(3, "0")}`); // Format as C001, C002, etc.
 }
 
 function resetForm() {
