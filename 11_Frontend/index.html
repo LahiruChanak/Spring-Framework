@@ -217,9 +217,8 @@
       <!-- Delete Confirmation Modal -->
       <div
         class="modal fade"
-        id="deleteModal"
+        id="deleteConfirmModal"
         tabindex="-1"
-        aria-labelledby="deleteModalLabel"
         aria-hidden="true"
       >
         <div class="modal-dialog">
@@ -230,28 +229,49 @@
               <div class="bg-danger-subtle text-danger fs-4 mb-2 alert-icon">
                 <i class="hgi-stroke hgi-alert-02 align-middle"></i>
               </div>
-              <h5 class="modal-title" id="deleteModalLabel">
-                Delete Confirmation
-              </h5>
+              <h5 class="modal-title">Delete Confirmation</h5>
             </div>
-            <div class="modal-footer d-flex justify-content-center gap-3">
+            <div class="modal-body text-center p-0 mb-2">
+              Are you sure you want to delete this customer?
+            </div>
+            <div
+              class="modal-footer d-flex justify-content-center gap-3 border-0"
+            >
               <button
                 type="button"
                 class="btn btn-secondary bg-secondary-subtle text-black border-0 rounded-pill"
                 data-bs-dismiss="modal"
               >
-                No, Keep
+                No, Cancel
               </button>
               <button
                 type="button"
                 class="btn btn-danger rounded-pill"
-                onclick="confirmDelete()"
+                id="confirmDeleteBtn"
               >
                 Yes, Delete!
               </button>
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- Alert Toast -->
+      <div
+        id="alertContainer"
+        class="position-fixed bottom-0 end-0 my-2 mx-3 z-3"
+      >
+        <template id="alertTemplate">
+          <div class="alert alert-dismissible fade show" role="alert">
+            <span class="alert-message"></span>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="alert"
+              aria-label="Close"
+            ></button>
+          </div>
+        </template>
       </div>
     </div>
 

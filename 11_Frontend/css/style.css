@@ -224,6 +224,17 @@ body {
   font-weight: bold;
 }
 
+.btn-close {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.removing {
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
 @media (max-width: 768px) {
   .container {
     padding: 1rem;
