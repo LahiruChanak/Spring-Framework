@@ -1,34 +1,39 @@
-// Profile picture preview for add customer form
-const profilePicWrapper = document.querySelector(".profile-upload");
-const profileInput = document.getElementById("profile-pic");
-const profilePreview = document.getElementById("profilePreview");
+const BASE_URL = "http://localhost:8080/10_Backend_Web_exploded/api/v1/customer";
 
-profilePicWrapper.addEventListener("click", function () {
-  profileInput.click();
+$(document).ready(function () {
+  // Profile picture preview for add customer form
+  const profilePicWrapper = $(".profile-upload");
+  const profileInput = $("#profile-pic");
+  const profilePreview = $("#profilePreview");
+
+  profilePicWrapper.click(function () {
+    profileInput.click();
+  });
+
+  profileInput.change(function (e) {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        profilePreview.attr('src', e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  loadCustomers();
+  $("#id").val(generateCustomerId());
 });
-
-profileInput.addEventListener("change", function (e) {
-  const file = e.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      profilePreview.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  }
-});
-
-loadCustomers();
 
 // Save customer
 function saveCustomer() {
-  const id = document.getElementById("id").value;
-  const name = document.getElementById("name").value;
-  const address = document.getElementById("address").value;
-  const age = document.getElementById("age").value;
-  const profilePic = document.getElementById("profilePreview").src;
+  const id = $("#id").val();
+  const name = $("#name").val();
+  const address = $("#address").val();
+  const age = $("#age").val();
+  const profilePic = $("#profilePreview").attr('src');
 
-  if (!id || !name || !address || !age) {
+  if (!name || !address || !age) {
     alert("Please fill in all fields");
     return;
   }
@@ -41,35 +46,34 @@ function saveCustomer() {
     profilePic,
   };
 
-  fetch("http://localhost:8080/10_Backend_Web_exploded/api/v1/customer/save", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(customer),
-  })
-    .then((response) => response.json())
-    .then((data) => {
+  $.ajax({
+    url: BASE_URL + "/save",
+    type: "POST",
+    contentType: "application/json",
+    data: JSON.stringify(customer),
+    success: function () {
       alert("Customer saved successfully");
       resetForm();
       loadCustomers();
-    })
-    .catch((error) => {
-      alert("Error saving customer" + error);
-    });
+      $("#id").val(generateCustomerId());
+    },
+    error: function (error) {
+      console.error("Error saving customer:", error);
+    }
+  });
 }
 
 // Load customers
 function loadCustomers() {
-  fetch("http://localhost:8080/10_Backend_Web_exploded/api/v1/customer/getAll")
-    .then((response) => response.json())
-    .then((customers) => {
-      const tableBody = document.getElementById("customerTable");
-      tableBody.innerHTML = "";
+  $.ajax({
+    url: BASE_URL + "/getAll",
+    type: "GET",
+    success: function (customers) {
+      const tableBody = $("#customerTable");
+      tableBody.empty();
 
       customers.forEach((customer) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
+        const row = $("<tr>").html(`
           <td>
             <img src="${customer.profilePic}" alt="${customer.name}" class="customer-photo">
           </td>
@@ -85,46 +89,47 @@ function loadCustomers() {
               <i class="hgi-stroke hgi-delete-02 fs-5"></i>
             </button>
           </td>
-        `;
-        tableBody.appendChild(row);
+        `);
+        tableBody.append(row);
       });
-    })
-    .catch((error) => {
-      alert("Error loading customers" + error);
-    });
+    },
+    error: function (error) {
+      alert("Error loading customers: " + error.statusText);
+    }
+  });
 }
 
 // Edit customer
 function editCustomer(id) {
-  fetch(`http://localhost:8080/10_Backend_Web_exploded/api/v1/customer/getAll`)
-    .then((response) => response.json())
-    .then((customers) => {
+  $.ajax({
+    url: `${BASE_URL}/getAll`,
+    type: "GET",
+    success: function (customers) {
       const customer = customers.find((c) => c.id === id);
       if (customer) {
-        document.getElementById("editId").value = customer.id;
-        document.getElementById("editName").value = customer.name;
-        document.getElementById("editAddress").value = customer.address;
-        document.getElementById("editAge").value = customer.age;
-        document.getElementById("editProfilePreview").src = customer.profilePic;
+        $("#editId").val(customer.id);
+        $("#editName").val(customer.name);
+        $("#editAddress").val(customer.address);
+        $("#editAge").val(customer.age);
+        $("#editProfilePreview").attr('src', customer.profilePic);
 
-        const editModal = new bootstrap.Modal(
-          document.getElementById("editModal")
-        );
+        const editModal = new bootstrap.Modal($("#editModal")[0]);
         editModal.show();
       }
-    })
-    .catch((error) => {
-      alert("Error fetching customer for edit:" + error);
-    });
+    },
+    error: function (error) {
+      alert("Error fetching customer for edit: " + error.statusText);
+    }
+  });
 }
 
 // Update customer
 function updateCustomer() {
-  const id = document.getElementById("editId").value;
-  const name = document.getElementById("editName").value;
-  const address = document.getElementById("editAddress").value;
-  const age = document.getElementById("editAge").value;
-  const profilePic = document.getElementById("editProfilePreview").src;
+  const id = $("#editId").val();
+  const name = $("#editName").val();
+  const address = $("#editAddress").val();
+  const age = $("#editAge").val();
+  const profilePic = $("#editProfilePreview").attr('src');
 
   if (!name || !address || !age) {
     alert("Please fill in all fields");
@@ -139,106 +144,102 @@ function updateCustomer() {
     profilePic,
   };
 
-  fetch(
-    "http://localhost:8080/10_Backend_Web_exploded/api/v1/customer/update",
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(customer),
-    }
-  )
-    .then((response) => response.json())
-    .then(() => {
+  $.ajax({
+    url: BASE_URL + "/update",
+    type: "PUT",
+    contentType: "application/json",
+    data: JSON.stringify(customer),
+    success: function () {
       alert("Customer updated successfully");
-
-      const editModalEl = document.getElementById("editModal");
-      const editModal = bootstrap.Modal.getInstance(editModalEl);
+      const editModal = bootstrap.Modal.getInstance($("#editModal")[0]);
       editModal.hide();
-
       loadCustomers();
-    })
-    .catch((error) => {
-      alert("Error updating customer:" + error);
-    });
+    },
+    error: function (error) {
+      alert("Error updating customer: " + error.statusText);
+    }
+  });
 }
 
 // Delete customer
 function deleteCustomer(id) {
-  fetch(
-    `http://localhost:8080/10_Backend_Web_exploded/api/v1/customer/delete/${id}`,
-    {
-      method: "DELETE",
+  $.ajax({
+    url: `${BASE_URL}/delete/${id}`,
+    type: "DELETE",
+    success: function () {
+      alert("Customer deleted successfully");
+      loadCustomers();
+    },
+    error: function (error) {
+      alert("Error deleting customer: " + error.statusText);
     }
-  )
-    .then((response) => {
-      if (response.ok) {
-        alert("Customer deleted successfully");
-        loadCustomers();
-      } else {
-        alert("Error deleting customer");
-      }
-    })
-    .catch((error) => {
-      alert("Error deleting customer:" + error);
-    });
+  });
 }
 
 // Profile picture preview for edit modal
-const editProfilePicWrapper = document.querySelector(
-  "#editModal .profile-upload"
-);
-const editProfileInput = document.getElementById("edit-profile-pic");
-const editProfilePreview = document.getElementById("editProfilePreview");
+$(document).ready(function () {
+  const editProfilePicWrapper = $("#editModal .profile-upload");
+  const editProfileInput = $("#edit-profile-pic");
+  const editProfilePreview = $("#editProfilePreview");
 
-editProfilePicWrapper.addEventListener("click", function () {
-  editProfileInput.click();
-});
+  editProfilePicWrapper.click(function () {
+    editProfileInput.click();
+  });
 
-editProfileInput.addEventListener("change", function (e) {
-  const file = e.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      editProfilePreview.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  }
+  editProfileInput.change(function (e) {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        editProfilePreview.attr('src', e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  });
 });
 
 // Remove profile picture from edit modal
-const editRemoveProfilePicBtn = document.querySelector(
-  "#editModal .remove-image-btn"
-);
+const editRemoveProfilePicBtn = $("#editModal .remove-image-btn");
+const editProfileInput = $("#edit-profile-pic");
+const editProfilePreview = $("#editProfilePreview");
 
 // Show/hide the "X" button based on profile picture state
-editProfileInput.addEventListener("change", function (e) {
+editProfileInput.change(function (e) {
   const file = e.target.files[0];
   if (file) {
     const reader = new FileReader();
     reader.onload = function (e) {
-      editProfilePreview.src = e.target.result;
-      editRemoveProfilePicBtn.style.display = "flex";
+      editProfilePreview.attr('src', e.target.result);
+      editRemoveProfilePicBtn.css('display', 'flex');
     };
     reader.readAsDataURL(file);
   }
 });
 
+// Generate customer ID
+function generateCustomerId() {
+  const lastCustomer = $('#customerTable tr:last-child');
+  if (lastCustomer.length === 0) return 'C001';
+
+  const lastId = lastCustomer.children().eq(1).text();
+  const num = parseInt(lastId.substring(1)) + 1;
+  return `C${String(num).padStart(3, '0')}`;
+}
+
 // Reset profile picture to placeholder when "X" is clicked
-editRemoveProfilePicBtn.addEventListener("click", function (e) {
+editRemoveProfilePicBtn.click(function (e) {
   e.stopPropagation();
-  editProfilePreview.classList.add("removing");
+  editProfilePreview.addClass("removing");
   setTimeout(() => {
-    editProfilePreview.src = "./img/placeholder.jpg";
-    editProfilePreview.classList.remove("removing");
-    editProfileInput.value = "";
-    editRemoveProfilePicBtn.style.display = "none";
+    editProfilePreview.attr('src', "./img/placeholder.jpg");
+    editProfilePreview.removeClass("removing");
+    editProfileInput.val("");
+    editRemoveProfilePicBtn.css('display', 'none');
   }, 300);
 });
 
 // Reset form
 function resetForm() {
-  document.getElementById("customerForm").reset();
-  document.getElementById("profilePreview").src = "./img/placeholder.jpg";
+  $("#customerForm")[0].reset();
+  $("#profilePreview").attr('src', "./img/placeholder.jpg");
 }
