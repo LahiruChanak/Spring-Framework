@@ -7,6 +7,23 @@ body {
   padding: 2rem 0;
 }
 
+/* scroll-bar for Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 0.5rem;
+  height: 0.5rem;
+}
+
+::-webkit-scrollbar-track {
+  background: #6b73ff;
+  border-radius: 6px;
+  margin: 5px 0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #121212;
+  border-radius: 6px;
+}
+
 .container {
   max-width: 800px;
 }

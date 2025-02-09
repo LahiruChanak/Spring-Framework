@@ -301,7 +301,8 @@ function showAlert(type, message) {
   `;
 
   $("#alertContainer").append(alertHtml);
+
   setTimeout(() => {
-    $("#alertContainer .alert:first-child").alert("close");
+    $(".alert").alert("close");
   }, 3000);
 }
