@@ -1,4 +1,3 @@
-// Constants
 const BASE_URL =
   "http://localhost:8080/10_Backend_Web_exploded/api/v1/customer";
 
@@ -21,12 +20,10 @@ $(document).ready(function () {
 
 // Initialize profile picture handlers
 function initializeProfilePicture() {
-  // Stop propagation on file input click
   $('input[type="file"]').on("click", function (e) {
     e.stopPropagation();
   });
 
-  // Add customer profile picture
   $(".profile-upload").on("click", function () {
     const fileInput = $(this).find('input[type="file"]');
     fileInput.trigger("click");
@@ -278,12 +275,12 @@ function validateCustomerData(data) {
 function updateNextCustomerId() {
   const lastRow = $("#customerTable tr:last");
   if (lastRow.length === 0) {
-    $("#id").val("C001"); // If no rows exist, start with C001
+    $("#id").val("C001");
     return;
   }
   const lastId = lastRow.find("td:eq(1)").text(); // Get the last ID from the table
-  const num = parseInt(lastId.substring(1)) + 1; // Extract numeric part and increment
-  $("#id").val(`C${String(num).padStart(3, "0")}`); // Format as C001, C002, etc.
+  const num = parseInt(lastId.substring(1)) + 1;
+  $("#id").val(`C${String(num).padStart(3, "0")}`);
 }
 
 function resetForm() {
