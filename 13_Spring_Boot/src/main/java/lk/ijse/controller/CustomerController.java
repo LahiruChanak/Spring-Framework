@@ -33,7 +33,7 @@ public class CustomerController {
 
     @PutMapping("update")
     public Boolean updateCustomer(@RequestBody CustomerDTO customerDTO) {
-        boolean res = customerService.updateCustomer(customerDTO.getId(), customerDTO);
+        boolean res = customerService.updateCustomer(customerDTO);
 
         if (res) {
             return true;

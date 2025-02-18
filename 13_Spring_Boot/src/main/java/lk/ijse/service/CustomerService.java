@@ -27,6 +27,7 @@ public class CustomerService {
 
     public CustomerDTO getCustomerById(int id) {
         Optional<Customer> customerOptional = customerRepo.findById(id);
+
         if (customerOptional.isPresent()) {
             Customer customer = customerOptional.get();
             return new CustomerDTO(
@@ -37,12 +38,12 @@ public class CustomerService {
         return null;
     }
 
-    public boolean updateCustomer(int id, CustomerDTO customerDTO) {
-        Optional<Customer> customerOptional = customerRepo.findById(id);
-        if (customerOptional.isPresent()) {
-            Customer customer = customerOptional.get();
-            customer.setName(customerDTO.getName());
-            customer.setAddress(customerDTO.getAddress());
+    public boolean updateCustomer(CustomerDTO customerDTO) {
+        if (customerRepo.existsById(customerDTO.getId())) {
+            Customer customer = new Customer(
+                    customerDTO.getId(),
+                    customerDTO.getName(),
+                    customerDTO.getAddress());
             customerRepo.save(customer);
             return true;
         }
