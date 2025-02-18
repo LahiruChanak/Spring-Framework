@@ -69,18 +69,6 @@ function handleImageSelection(event, previewId) {
   }
 }
 
-// // Preview image helper function
-// function previewImage(file, previewId) {
-//   const reader = new FileReader();
-//   reader.onload = function (e) {
-//     $(`#${previewId}`).attr("src", e.target.result);
-//     if (previewId === "editProfilePreview") {
-//       $(".remove-image-btn").show();
-//     }
-//   };
-//   reader.readAsDataURL(file);
-// }
-
 // Save customer
 function saveCustomer() {
   const customerData = {
