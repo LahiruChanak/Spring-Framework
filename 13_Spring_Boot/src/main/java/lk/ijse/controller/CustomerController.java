@@ -1,33 +1,60 @@
 package lk.ijse.controller;
 
 import lk.ijse.dto.CustomerDTO;
-import lk.ijse.entity.Customer;
-import lk.ijse.repository.CustomerRepo;
 import lk.ijse.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/v1/customer", produces = "application/json")
+@RequestMapping("api/v1/customer")
 public class CustomerController {
 
     @Autowired
     private CustomerService customerService;
 
-    @Autowired
-    private CustomerRepo customerRepo;
+    @PostMapping(path = "save")
+    public Boolean saveCustomer(@RequestBody CustomerDTO customerDTO) {
+        boolean res = customerService.save(customerDTO);
+        return res;
+    }
 
-    @PostMapping(path = "/save")
-    public boolean getCustomer(@RequestBody CustomerDTO dto) {
-        customerRepo.save(new Customer(
-                dto.getId(),
-                dto.getName(),
-                dto.getAddress()
-        ));
+    @GetMapping("search/{id}")
+    public CustomerDTO getCustomerById(@PathVariable int id) {
+        CustomerDTO customerDTO = customerService.getCustomerById(id);
 
-        return true;
+        if (customerDTO != null) {
+            return customerDTO;
+        } else {
+            return null;
+        }
+    }
+
+    @PutMapping("update")
+    public Boolean updateCustomer(@RequestBody CustomerDTO customerDTO) {
+        boolean res = customerService.updateCustomer(customerDTO.getId(), customerDTO);
+
+        if (res) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @DeleteMapping("delete/{id}")
+    public Boolean deleteCustomer(@PathVariable int id) {
+        boolean res = customerService.deleteCustomer(id);
+        if (res) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @GetMapping("getAll")
+    public List<CustomerDTO> getAllCustomers() {
+        List<CustomerDTO> allCustomers = customerService.getAllCustomers();
+        return allCustomers;
     }
 }
