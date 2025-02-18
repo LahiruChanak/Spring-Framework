@@ -61,6 +61,7 @@ public class CustomerService {
     public List<CustomerDTO> getAllCustomers() {
         List<Customer> customers = customerRepo.findAll();
         List<CustomerDTO> customerDTOs = new ArrayList<>();
+
         for (Customer customer : customers) {
             customerDTOs.add(new CustomerDTO(
                     customer.getId(),
