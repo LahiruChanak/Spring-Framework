@@ -45,6 +45,7 @@ public class CustomerController {
     @DeleteMapping("delete/{id}")
     public Boolean deleteCustomer(@PathVariable int id) {
         boolean res = customerService.deleteCustomer(id);
+
         if (res) {
             return true;
         } else {
