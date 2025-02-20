@@ -36,58 +36,6 @@ body {
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
 }
 
-.profile-upload {
-    position: relative;
-    width: 150px;
-    height: 150px;
-    margin: 0 auto 1rem;
-    cursor: pointer;
-}
-
-.profile-pic-wrapper {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    border-radius: 50%;
-    overflow: hidden;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-}
-
-.profile-pic {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: all 0.3s ease;
-}
-
-.overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: all 0.3s ease;
-}
-
-.upload-icon {
-    color: white;
-    font-size: 2rem;
-}
-
-.profile-upload:hover .overlay {
-    opacity: 1;
-}
-
-.profile-upload:hover .profile-pic-wrapper {
-    transform: scale(1.02);
-}
-
 .form-control {
     border: 2px solid #e0e0e0;
     border-radius: 12px;
@@ -165,15 +113,6 @@ body {
     background-color: rgba(107, 115, 255, 0.05);
 }
 
-.customer-photo {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    padding: 1px;
-    border: 2px solid #6b73ff;
-}
-
 .btn-action {
     padding: 5px 12px;
     border-radius: 8px;
@@ -210,46 +149,10 @@ body {
     justify-content: center;
 }
 
-.profile-img-container {
-    position: relative;
-    width: 150px;
-    height: 150px;
-    margin: 0 auto 1rem;
-}
-
-.remove-image-btn {
-    position: absolute;
-    top: 5%;
-    right: 0;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    border: 2px solid transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #ff6b6b;
-    font-size: 1.25rem;
-    color: white;
-    transition: all 0.3s ease;
-}
-
-.remove-image-btn:hover {
-    background-color: #fff;
-    border-color: #ff6b6b;
-    color: #ff6b6b;
-    font-weight: bold;
-}
-
 .btn-close {
     border: none !important;
     outline: none !important;
     box-shadow: none !important;
-}
-
-.removing {
-    opacity: 0.5;
-    transition: opacity 0.3s ease;
 }
 
 @media (max-width: 768px) {
