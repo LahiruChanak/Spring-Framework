@@ -8,10 +8,10 @@ function fetchCustomerData() {
         url: "http://localhost:8080/api/v1/customer/getAll",
         success: function (response) {
             $("#customerTable").empty();
-            for (const data of response) {
+            for (const data of response.object) {
                 $("#customerTable").append(
                     `<tr data-id="${data.id}">
-                            ${createTableRow(data.id, data.name, data.address, data.age)}
+                            ${createTableRow(data.id, data.name, data.address)}
                         </tr>`
                 );
             }

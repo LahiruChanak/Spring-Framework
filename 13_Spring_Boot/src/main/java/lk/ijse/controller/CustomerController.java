@@ -1,11 +1,10 @@
 package lk.ijse.controller;
 
 import lk.ijse.dto.CustomerDTO;
-import lk.ijse.service.CustomerService;
+import lk.ijse.service.impl.CustomerServiceImpl;
+import lk.ijse.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/customer")
@@ -13,50 +12,49 @@ import java.util.List;
 public class CustomerController {
 
     @Autowired
-    private CustomerService customerService;
+    private CustomerServiceImpl customerService;
 
     @PostMapping(path = "save")
-    public Boolean saveCustomer(@RequestBody CustomerDTO customerDTO) {
-        boolean res = customerService.save(customerDTO);
-        return res;
+    public ResponseUtil saveCustomer(@RequestBody CustomerDTO customerDTO) {
+        boolean res = customerService.saveCustomer(customerDTO);
+
+        if (res) {
+            return new ResponseUtil(201, "Customer Saved", null);
+        }
+        return new ResponseUtil(409, "Customer Already Exists.", null);
+
     }
 
     @GetMapping("search/{id}")
-    public CustomerDTO getCustomerById(@PathVariable int id) {
-        CustomerDTO customerDTO = customerService.getCustomerById(id);
+    public ResponseUtil getCustomerById(@PathVariable int id) {
 
-        if (customerDTO != null) {
-            return customerDTO;
-        } else {
-            return null;
-        }
+        return new ResponseUtil(200, "Success", customerService.getCustomerById(id));
     }
 
     @PutMapping("update")
-    public Boolean updateCustomer(@RequestBody CustomerDTO customerDTO) {
+    public ResponseUtil updateCustomer(@RequestBody CustomerDTO customerDTO) {
         boolean res = customerService.updateCustomer(customerDTO);
 
         if (res) {
-            return true;
+            return new ResponseUtil(200, "Customer Updated", null);
         } else {
-            return false;
+            return new ResponseUtil(400, "Customer Not Updated", null);
         }
     }
 
     @DeleteMapping("delete/{id}")
-    public Boolean deleteCustomer(@PathVariable int id) {
+    public ResponseUtil deleteCustomer(@PathVariable int id) {
         boolean res = customerService.deleteCustomer(id);
 
         if (res) {
-            return true;
+            return new ResponseUtil(200, "Customer Deleted Successfully", null);
         } else {
-            return false;
+            return new ResponseUtil(400, "Customer Not Deleted", null);
         }
     }
 
     @GetMapping("getAll")
-    public List<CustomerDTO> getAllCustomers() {
-        List<CustomerDTO> allCustomers = customerService.getAllCustomers();
-        return allCustomers;
+    public ResponseUtil getAllCustomers() {
+        return new ResponseUtil(200, "Success", customerService.getAllCustomers());
     }
 }

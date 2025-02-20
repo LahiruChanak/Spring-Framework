@@ -8,7 +8,7 @@ function fetchItemData() {
         url: "http://localhost:8080/api/v1/item/getAll",
         success: function (response) {
             $("#itemTable").empty();
-            for (const data of response) {
+            for (const data of response.object) {
                 $("#itemTable").append(
                     `<tr data-code="${data.code}">
                             ${createTableRow(data.code, data.name, data.qtyOnHand, data.unitPrice)}

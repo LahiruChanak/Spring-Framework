@@ -1,7 +1,8 @@
 package lk.ijse.controller;
 
 import lk.ijse.dto.ItemDTO;
-import lk.ijse.service.ItemService;
+import lk.ijse.service.impl.ItemServiceImpl;
+import lk.ijse.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,50 +14,50 @@ import java.util.List;
 public class ItemController {
 
     @Autowired
-    private ItemService itemService;
+    private ItemServiceImpl itemService;
 
     @PostMapping(path = "save")
-    public Boolean saveItem(@RequestBody ItemDTO itemDTO) {
-        boolean res = itemService.save(itemDTO);
-        return res;
+    public ResponseUtil saveItem(@RequestBody ItemDTO itemDTO) {
+
+        boolean res = itemService.saveItem(itemDTO);
+
+        if (res) {
+            return new ResponseUtil(201, "Item Saved Successfully", null);
+        }
+        return new ResponseUtil(409, "Item Already Exists.", null);
     }
 
     @GetMapping("search/{id}")
-    public ItemDTO getItemById(@PathVariable int id) {
-        ItemDTO itemDTO = itemService.getItemById(id);
+    public ResponseUtil getItemById(@PathVariable int id) {
 
-        if (itemDTO != null) {
-            return itemDTO;
-        } else {
-            return null;
-        }
+        return new ResponseUtil(200, "Success", itemService.getItemById(id));
     }
 
     @PutMapping("update")
-    public Boolean updateItem(@RequestBody ItemDTO itemDTO) {
+    public ResponseUtil updateItem(@RequestBody ItemDTO itemDTO) {
         boolean res = itemService.updateItem(itemDTO);
 
         if (res) {
-            return true;
+            return new ResponseUtil(200, "Item Updated Successfully", null);
         } else {
-            return false;
+            return new ResponseUtil(400, "Item Not Updated", null);
         }
     }
 
     @DeleteMapping("delete/{id}")
-    public Boolean deleteItem(@PathVariable int id) {
+    public ResponseUtil deleteItem(@PathVariable int id) {
         boolean res = itemService.deleteItem(id);
 
         if (res) {
-            return true;
+            return new ResponseUtil(200, "Item Deleted Successfully", null);
         } else {
-            return false;
+            return new ResponseUtil(400, "Item Not Deleted", null);
         }
     }
 
     @GetMapping("getAll")
-    public List<ItemDTO> getAllItems() {
-        List<ItemDTO> allItems = itemService.getAllItems();
-        return allItems;
+    public ResponseUtil getAllItems() {
+
+        return new ResponseUtil(200, "Successfully Retrieved", itemService.getAllItems());
     }
 }
