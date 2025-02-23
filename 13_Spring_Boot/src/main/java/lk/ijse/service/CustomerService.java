@@ -6,10 +6,14 @@ import java.util.List;
 
 public interface CustomerService {
 
-    public boolean saveCustomer(CustomerDTO customerDTO);
-    public boolean updateCustomer(CustomerDTO customerDTO);
-    public boolean deleteCustomer(int id);
+    public void saveCustomer(CustomerDTO customerDTO);
+
+    public void updateCustomer(CustomerDTO customerDTO);
+
+    public void deleteCustomer(int id);
+
     public CustomerDTO getCustomerById(int id);
+
     public List<CustomerDTO> getAllCustomers();
 
 }

@@ -22,16 +22,16 @@ public class CustomerServiceImpl implements CustomerService {
     private ModelMapper modelMapper; // ModelMapper
 
     @Override
-    public boolean saveCustomer(CustomerDTO customerDTO) {
+    public void saveCustomer(CustomerDTO customerDTO) {
 //        Customer customer = new Customer(
 //                customerDTO.getId(),
 //                customerDTO.getName(),
 //                customerDTO.getAddress());
         if (customerRepo.existsById(customerDTO.getId())) {
-            return false;
+            throw new RuntimeException("Customer already exists..!");
         }
+
         customerRepo.save(modelMapper.map(customerDTO, Customer.class));
-        return true;
     }
 
     @Override
@@ -49,25 +49,25 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public boolean updateCustomer(CustomerDTO customerDTO) {
+    public void updateCustomer(CustomerDTO customerDTO) {
         if (customerRepo.existsById(customerDTO.getId())) {
 //            Customer customer = new Customer(
 //                    customerDTO.getId(),
 //                    customerDTO.getName(),
 //                    customerDTO.getAddress());
             customerRepo.save(modelMapper.map(customerDTO, Customer.class));
-            return true;
         }
-        return false;
+
+        throw new RuntimeException("No such customer for update..!");
     }
 
     @Override
-    public boolean deleteCustomer(int id) {
+    public void deleteCustomer(int id) {
         if (customerRepo.existsById(id)) {
             customerRepo.deleteById(id);
-            return true;
         }
-        return false;
+
+        throw new RuntimeException("No such customer for delete..!");
     }
 
     @Override
@@ -81,8 +81,8 @@ public class CustomerServiceImpl implements CustomerService {
 //                    customer.getName(),
 //                    customer.getAddress()));
 //        }
-        return modelMapper.map(customerRepo.findAll(), new TypeToken<List<CustomerDTO>>() {
-        }.getType());
 
+        return modelMapper.map(customerRepo.findAll(),
+                new TypeToken<List<CustomerDTO>>() {}.getType());
     }
 }

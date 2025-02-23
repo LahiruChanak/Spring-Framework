@@ -23,7 +23,7 @@ public class ItemServiceImpl implements ItemService {
     private ModelMapper modelMapper;
 
     @Override
-    public boolean saveItem(ItemDTO itemDTO) {
+    public void saveItem(ItemDTO itemDTO) {
 //        Item item = new Item(
 //                itemDTO.getCode(),
 //                itemDTO.getName(),
@@ -31,11 +31,11 @@ public class ItemServiceImpl implements ItemService {
 //                itemDTO.getUnitPrice());
 
         // use model mapper to map
-        if (itemRepo.existsById(itemDTO.getCode())) {
-            return false;
+        if (itemRepo.existsById(itemDTO.getItemCode())) {
+            throw new RuntimeException("Item already exists..!");
         }
+
         itemRepo.save(modelMapper.map(itemDTO, Item.class));
-        return true;
     }
 
     @Override
@@ -45,8 +45,8 @@ public class ItemServiceImpl implements ItemService {
         if (itemOptional.isPresent()) {
             Item item = itemOptional.get();
             return new ItemDTO(
-                    item.getCode(),
-                    item.getName(),
+                    item.getItemCode(),
+                    item.getDescription(),
                     item.getQtyOnHand(),
                     item.getUnitPrice());
         }
@@ -54,8 +54,8 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public boolean updateItem(ItemDTO itemDTO) {
-        if (itemRepo.existsById(itemDTO.getCode())) {
+    public void updateItem(ItemDTO itemDTO) {
+        if (itemRepo.existsById(itemDTO.getItemCode())) {
 //            Item item = new Item(
 //                    itemDTO.getCode(),
 //                    itemDTO.getName(),
@@ -64,18 +64,18 @@ public class ItemServiceImpl implements ItemService {
 
             // use model mapper to map
             itemRepo.save(modelMapper.map(itemDTO, Item.class));
-            return true;
         }
-        return false;
+
+        throw new RuntimeException("No such item for update..!");
     }
 
     @Override
-    public boolean deleteItem(int id) {
+    public void deleteItem(int id) {
         if (itemRepo.existsById(id)) {
-            itemRepo.deleteById(id);
-            return true;
+            itemRepo.deleteById(id);;
         }
-        return false;
+
+        throw new RuntimeException("No such item for delete..!");
     }
 
     @Override

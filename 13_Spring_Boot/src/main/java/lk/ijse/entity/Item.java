@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 public class Item {
 
     @Id
-    private int code;
-    private String name;
+    private int itemCode;
+    private String description;
     private int qtyOnHand;
     private double unitPrice;
 

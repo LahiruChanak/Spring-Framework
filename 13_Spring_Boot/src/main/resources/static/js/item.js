@@ -1,159 +1,225 @@
-let isEditing = false;
-let currentEditCode = null;
+const BASE_URL = "http://localhost:8080/api/v1/item";
 
-fetchItemData();
+$(document).ready(function () {
+    loadItems();
 
-function fetchItemData() {
-    $.ajax({
-        url: "http://localhost:8080/api/v1/item/getAll",
-        success: function (response) {
-            $("#itemTable").empty();
-            for (const data of response.object) {
-                $("#itemTable").append(
-                    `<tr data-code="${data.code}">
-                            ${createTableRow(data.code, data.name, data.qtyOnHand, data.unitPrice)}
-                        </tr>`
-                );
-            }
-        },
-        error: function (error) {
-            alert(error);
-        }
+    $("#itemForm").on("submit", function (e) {
+        e.preventDefault();
+        saveItem();
     });
-}
 
-$('#itemForm').on('submit', function (e) {
-    e.preventDefault();
-    saveItem();
+    $("#editForm").on("submit", function (e) {
+        e.preventDefault();
+        updateItem();
+    });
 });
 
 function saveItem() {
-    const code = $('#code').val();
-    const name = $('#name').val();
-    const qtyOnHand = $('#qtyOnHand').val();
-    const unitPrice = $('#unitPrice').val();
+    const itemData = {
+        itemCode: $("#itemCode").val(),
+        description: $("#description").val(),
+        unitPrice: parseFloat($("#price").val()),
+        qtyOnHand: parseInt($("#qty").val())
+    };
 
-    if (!code || !name || !qtyOnHand || !unitPrice) {
-        alert('All fields are required!');
+    if (!validateItemData(itemData)) {
         return;
     }
 
-    if (isEditing) {
-        updateExistingItem(code, name, qtyOnHand, unitPrice);
-    } else {
-        addNewItem(code, name, qtyOnHand, unitPrice);
-    }
-
-    clearForm();
-}
-
-function addNewItem(code, name, qtyOnHand, unitPrice) {
     $.ajax({
-        url: "http://localhost:8080/api/v1/item/save",
+        url: `${BASE_URL}/save`,
         method: "POST",
         contentType: "application/json",
-        data: JSON.stringify(
-            {
-                code: code,
-                name: name,
-                qtyOnHand: qtyOnHand,
-                unitPrice: unitPrice
-            }),
+        data: JSON.stringify(itemData),
         success: function (response) {
-            fetchItemData();
-            clearForm();
-            alert("Item Saved!");
+            showAlert("success", response.message);
+            resetForm();
+            loadItems();
         },
-        error: function (error) {
-            alert(error);
+        error: function (xhr) {
+            let errorMsg = "Error saving item";
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+                errorMsg = xhr.responseJSON.message;
+            }
+            showAlert("error", errorMsg);
         }
     });
 }
 
-function updateExistingItem(code, name, qtyOnHand, unitPrice) {
+function loadItems() {
     $.ajax({
-        url: "http://localhost:8080/api/v1/item/update",
+        url: `${BASE_URL}/getAll`,
+        method: "GET",
+        contentType: "application/json",
+        success: function (response) {
+            if (response.status && response.data) {
+                const tableBody = $("#itemTable");
+                tableBody.empty();
+
+                response.data.forEach(function (item) {
+                    tableBody.append(`
+                            <tr>
+                                <td>${item.itemCode}</td>
+                                <td>${item.description}</td>
+                                <td>${item.unitPrice.toFixed(2)}</td>
+                                <td>${item.qtyOnHand}</td>
+                                <td>
+                                    <button class="btn btn-action btn-edit me-2" data-item-code="${item.itemCode}">
+                                        <i class="hgi-stroke hgi-pencil-edit-02 fs-5"></i>
+                                    </button>
+                                    <button class="btn btn-action btn-delete" data-item-code="${item.itemCode}">
+                                        <i class="hgi-stroke hgi-delete-02 fs-5"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `);
+                });
+
+                attachButtonHandlers();
+            }
+        },
+        error: function (xhr) {
+            let errorMsg = "Error loading items";
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+                errorMsg = xhr.responseJSON.message;
+            }
+            showAlert("error", errorMsg);
+        }
+    });
+}
+
+function attachButtonHandlers() {
+    $(".btn-edit").click(function () {
+        const itemCode = $(this).data("item-code");
+        editItem(itemCode);
+    });
+
+    $(".btn-delete").click(function () {
+        const itemCode = $(this).data("item-code");
+        $("#deleteConfirmModal").data("item-code", itemCode);
+        $("#deleteConfirmModal").modal("show");
+    });
+}
+
+function editItem(itemCode) {
+    $.ajax({
+        url: `${BASE_URL}/getAll`,
+        method: "GET",
+        contentType: "application/json",
+        success: function (response) {
+            if (response.status && response.data) {
+                const item = response.data.find((i) => i.itemCode === itemCode);
+                if (item) {
+                    $("#editItemCode").val(item.itemCode);
+                    $("#editDescription").val(item.description);
+                    $("#editPrice").val(item.unitPrice.toFixed(2));
+                    $("#editQty").val(item.qtyOnHand);
+
+                    new bootstrap.Modal("#editModal").show();
+                }
+            }
+        },
+        error: function (xhr) {
+            let errorMsg = "Error fetching item data";
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+                errorMsg = xhr.responseJSON.message;
+            }
+            showAlert("error", errorMsg);
+        }
+    });
+}
+
+function updateItem() {
+    const itemData = {
+        itemCode: $("#editItemCode").val(),
+        description: $("#editDescription").val(),
+        unitPrice: parseFloat($("#editPrice").val()),
+        qtyOnHand: parseInt($("#editQty").val())
+    };
+
+    if (!validateItemData(itemData)) {
+        return;
+    }
+
+    $.ajax({
+        url: `${BASE_URL}/update`,
         method: "PUT",
         contentType: "application/json",
-        data: JSON.stringify(
-            {
-                code: code,
-                name: name,
-                qtyOnHand: qtyOnHand,
-                unitPrice: unitPrice
-            }),
+        data: JSON.stringify(itemData),
         success: function (response) {
-            fetchItemData();
-            clearForm();
-            alert("Item Updated!");
-
-            isEditing = false;
-            currentEditCode = null;
-            $('#saveBtn').html('<i class="bi bi-save"></i> Save Item');
+            showAlert("success", response.message);
+            $("#editModal").modal("hide");
+            loadItems();
         },
-        error: function (error) {
-            alert(error);
+        error: function (xhr) {
+            let errorMsg = "Error updating item";
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+                errorMsg = xhr.responseJSON.message;
+            }
+            showAlert("error", errorMsg);
         }
     });
 }
 
-function createTableRow(code, name, qtyOnHand, unitPrice) {
-    return `
-            <td>${code}</td>
-            <td>${name}</td>
-            <td>${qtyOnHand}</td>
-            <td>${unitPrice}</td>
-            <td>
-                <button class="btn btn-action btn-edit me-2" onclick="editItem(this)">
-                    <i class="hgi-stroke hgi-pencil-edit-02 fs-5"></i>
-                </button>
-                <button class="btn btn-action btn-delete" onclick="removeItem(this)">
-                    <i class="hgi-stroke hgi-delete-02 fs-5"></i>
-                </button>
-            </td>
-        `;
+// Add handler for confirm delete button
+$("#confirmDeleteBtn").click(function () {
+    const itemCode = $("#deleteConfirmModal").data("item-code");
+    deleteItem(itemCode);
+    $("#deleteConfirmModal").modal("hide");
+});
+
+// Delete item
+function deleteItem(itemCode) {
+    $.ajax({
+        url: `${BASE_URL}/delete/${itemCode}`,
+        method: "DELETE",
+        contentType: "application/json",
+        success: function (response) {
+            showAlert("success", response.message);
+            loadItems();
+        },
+        error: function (xhr) {
+            let errorMsg = "Error deleting item";
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+                errorMsg = xhr.responseJSON.message;
+            }
+            showAlert("error", errorMsg);
+        }
+    });
 }
 
-window.editItem = function (button) {
-    const $row = $(button).closest('tr');
-    const $cells = $row.find('td');
-
-    $('#code').val($cells.eq(0).text());
-    $('#name').val($cells.eq(1).text());
-    $('#qtyOnHand').val($cells.eq(2).text());
-    $('#unitPrice').val($cells.eq(3).text());
-
-    isEditing = true;
-    currentEditCode = $cells.eq(0).text();
-    $('#saveBtn').html('<i class="bi bi-check-circle"></i> Update Item');
-    $('#code').prop('disabled', true);
-};
-
-window.removeItem = function (button) {
-    const $row = $(button).closest('tr');
-    const $cells = $row.find('td');
-
-    let code = $cells.eq(0).text();
-
-    if (confirm('Are you sure you want to delete this item?')) {
-        $.ajax({
-            url: "http://localhost:8080/api/v1/item/delete/" + code,
-            method: "DELETE",
-            success: function (response) {
-                fetchItemData();
-                alert("Item Deleted!");
-            },
-            error: function (error) {
-                console.log(error)
-            }
-        })
+function validateItemData(data) {
+    if (!data.itemCode || !data.description || !data.unitPrice || !data.qtyOnHand) {
+        showAlert("error", "Please fill in all fields");
+        return false;
     }
-};
+    if (data.price < 0) {
+        showAlert("error", "Price cannot be negative");
+        return false;
+    }
+    if (data.qty < 0) {
+        showAlert("error", "Quantity cannot be negative");
+        return false;
+    }
+    return true;
+}
 
-function clearForm() {
-    $('#itemForm')[0].reset();
-    $('#code').prop('disabled', false);
-    isEditing = false;
-    currentEditCode = null;
-    $('#saveBtn').html('<i class="bi bi-save"></i> Save Item');
+function resetForm() {
+    $("#itemForm")[0].reset();
+}
+
+function showAlert(type, message) {
+    const alertClass = type === "success" ? "bg-success" : "bg-danger";
+    const alertHtml = `
+            <div class="alert ${alertClass} text-white alert-dismissible fade show" role="alert">
+                ${message}
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `;
+
+    $("#alertContainer").append(alertHtml);
+
+    setTimeout(() => {
+        $(".alert").alert("close");
+    }, 3000);
 }

@@ -51,11 +51,11 @@ function loadCustomers() {
         method: "GET",
         contentType: "application/json",
         success: function (response) {
-            if (response.code && response.object) {
+            if (response.status && response.data) {
                 const tableBody = $("#customerTable");
                 tableBody.empty();
 
-                response.object.forEach(function (customer) {
+                response.data.forEach(function (customer) {
                     tableBody.append(`
                             <tr>
                                 <td>${customer.id}</td>
@@ -105,8 +105,8 @@ function editCustomer(id) {
         method: "GET",
         contentType: "application/json",
         success: function (response) {
-            if (response.code && response.object) {
-                const customer = response.object.find((c) => c.id === id);
+            if (response.status && response.data) {
+                const customer = response.data.find((c) => c.id === id);
                 if (customer) {
                     $("#editId").val(customer.id);
                     $("#editName").val(customer.name);

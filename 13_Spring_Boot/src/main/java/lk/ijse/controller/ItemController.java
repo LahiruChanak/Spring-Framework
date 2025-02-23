@@ -19,12 +19,9 @@ public class ItemController {
     @PostMapping(path = "save")
     public ResponseUtil saveItem(@RequestBody ItemDTO itemDTO) {
 
-        boolean res = itemService.saveItem(itemDTO);
+        itemService.saveItem(itemDTO);
+        return new ResponseUtil(201, "Item Saved Successfully", null);
 
-        if (res) {
-            return new ResponseUtil(201, "Item Saved Successfully", null);
-        }
-        return new ResponseUtil(409, "Item Already Exists.", null);
     }
 
     @GetMapping("search/{id}")
@@ -35,24 +32,18 @@ public class ItemController {
 
     @PutMapping("update")
     public ResponseUtil updateItem(@RequestBody ItemDTO itemDTO) {
-        boolean res = itemService.updateItem(itemDTO);
 
-        if (res) {
-            return new ResponseUtil(200, "Item Updated Successfully", null);
-        } else {
-            return new ResponseUtil(400, "Item Not Updated", null);
-        }
+        itemService.updateItem(itemDTO);
+        return new ResponseUtil(200, "Item Updated Successfully", null);
+
     }
 
     @DeleteMapping("delete/{id}")
     public ResponseUtil deleteItem(@PathVariable int id) {
-        boolean res = itemService.deleteItem(id);
 
-        if (res) {
-            return new ResponseUtil(200, "Item Deleted Successfully", null);
-        } else {
-            return new ResponseUtil(400, "Item Not Deleted", null);
-        }
+        itemService.deleteItem(id);
+        return new ResponseUtil(200, "Item Deleted Successfully", null);
+
     }
 
     @GetMapping("getAll")
