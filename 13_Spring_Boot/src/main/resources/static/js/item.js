@@ -2,6 +2,7 @@ const BASE_URL = "http://localhost:8080/api/v1/item";
 
 $(document).ready(function () {
     loadItems();
+    generateItemId()
 
     $("#itemForm").on("submit", function (e) {
         e.preventDefault();
@@ -13,6 +14,19 @@ $(document).ready(function () {
         updateItem();
     });
 });
+
+function generateItemId() {
+    const lastRow = $("#itemTable tr:last");
+
+    if (lastRow.length === 0) {
+        $("#itemCode").val("I-001");
+        return;
+    }
+
+    const lastId = lastRow.find("td:eq(0)").text().trim(); // Get the last ID from the table
+    const num = parseInt(lastId.replace("I-", "")) + 1;
+    $("#itemCode").val(`I-${String(num).padStart(3, "0")}`);
+}
 
 function saveItem() {
     const itemData = {
@@ -75,6 +89,7 @@ function loadItems() {
                         `);
                 });
 
+                generateItemId();
                 attachButtonHandlers();
             }
         },
@@ -147,7 +162,7 @@ function updateItem() {
         contentType: "application/json",
         data: JSON.stringify(itemData),
         success: function (response) {
-            showAlert("success", response.message);
+            showAlert("success", "Item updated successfully");
             $("#editModal").modal("hide");
             loadItems();
         },

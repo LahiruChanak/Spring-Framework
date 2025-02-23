@@ -25,7 +25,7 @@ public class ItemController {
     }
 
     @GetMapping("search/{id}")
-    public ResponseUtil getItemById(@PathVariable int id) {
+    public ResponseUtil getItemById(@PathVariable String id) {
 
         return new ResponseUtil(200, "Success", itemService.getItemById(id));
     }
@@ -39,7 +39,7 @@ public class ItemController {
     }
 
     @DeleteMapping("delete/{id}")
-    public ResponseUtil deleteItem(@PathVariable int id) {
+    public ResponseUtil deleteItem(@PathVariable String id) {
 
         itemService.deleteItem(id);
         return new ResponseUtil(200, "Item Deleted Successfully", null);

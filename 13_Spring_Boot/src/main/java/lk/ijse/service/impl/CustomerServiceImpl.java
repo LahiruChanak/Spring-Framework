@@ -35,7 +35,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDTO getCustomerById(int id) {
+    public CustomerDTO getCustomerById(String id) {
         Optional<Customer> customerOptional = customerRepo.findById(id);
 
         if (customerOptional.isPresent()) {
@@ -62,7 +62,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void deleteCustomer(int id) {
+    public void deleteCustomer(String id) {
         if (customerRepo.existsById(id)) {
             customerRepo.deleteById(id);
         }

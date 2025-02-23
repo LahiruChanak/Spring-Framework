@@ -12,6 +12,6 @@ import java.util.List;
 public class OrderDTO {
     private String orderId;
     private String dateTime;
-    private int customerId;
+    private String customerId;
     private List<OrderDetailDTO> orderDetails;
 }

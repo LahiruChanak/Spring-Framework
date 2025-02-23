@@ -21,7 +21,7 @@ public class Orders {
     private String dateTime;
 
     @Column(nullable = false)
-    private int customerId;
+    private String customerId;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<OrderDetail> orderDetails = new ArrayList<>();

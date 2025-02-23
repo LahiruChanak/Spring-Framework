@@ -2,6 +2,7 @@ const BASE_URL = "http://localhost:8080/api/v1/customer";
 
 $(document).ready(function () {
     loadCustomers();
+    generateCustomerId();
 
     $("#customerForm").on("submit", function (e) {
         e.preventDefault();
@@ -13,6 +14,19 @@ $(document).ready(function () {
         updateCustomer();
     });
 });
+
+function generateCustomerId() {
+    const lastRow = $("#customerTable tr:last");
+
+    if (lastRow.length === 0) {
+        $("#id").val("C-001");
+        return;
+    }
+
+    const lastId = lastRow.find("td:eq(0)").text().trim(); // Get the last ID from the table
+    const num = parseInt(lastId.replace("C-", "")) + 1;
+    $("#id").val(`C-${String(num).padStart(3, "0")}`);
+}
 
 function saveCustomer() {
     const customerData = {
@@ -73,6 +87,7 @@ function loadCustomers() {
                         `);
                 });
 
+                generateCustomerId();
                 attachButtonHandlers();
             }
         },
@@ -143,7 +158,7 @@ function updateCustomer() {
         contentType: "application/json",
         data: JSON.stringify(customerData),
         success: function (response) {
-            showAlert("success", response.message);
+            showAlert("success", "Customer updated successfully");
             $("#editModal").modal("hide");
             loadCustomers();
         },

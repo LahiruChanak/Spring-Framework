@@ -10,9 +10,9 @@ public interface CustomerService {
 
     public void updateCustomer(CustomerDTO customerDTO);
 
-    public void deleteCustomer(int id);
+    public void deleteCustomer(String id);
 
-    public CustomerDTO getCustomerById(int id);
+    public CustomerDTO getCustomerById(String id);
 
     public List<CustomerDTO> getAllCustomers();
 

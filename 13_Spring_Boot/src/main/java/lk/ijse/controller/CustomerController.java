@@ -22,7 +22,7 @@ public class CustomerController {
     }
 
     @GetMapping("search/{id}")
-    public ResponseUtil getCustomerById(@PathVariable int id) {
+    public ResponseUtil getCustomerById(@PathVariable String id) {
         return new ResponseUtil(200, "Success", customerService.getCustomerById(id));
     }
 
@@ -34,7 +34,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("delete/{id}")
-    public ResponseUtil deleteCustomer(@PathVariable int id) {
+    public ResponseUtil deleteCustomer(@PathVariable String id) {
         customerService.deleteCustomer(id);
         return new ResponseUtil(200, "Customer Deleted Successfully", null);
 

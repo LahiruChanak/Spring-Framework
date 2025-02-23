@@ -39,7 +39,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDTO getItemById(int id) {
+    public ItemDTO getItemById(String id) {
         Optional<Item> itemOptional = itemRepo.findById(id);
 
         if (itemOptional.isPresent()) {
@@ -70,7 +70,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public void deleteItem(int id) {
+    public void deleteItem(String id) {
         if (itemRepo.existsById(id)) {
             itemRepo.deleteById(id);;
         }

@@ -183,7 +183,7 @@ function showAlert(type, message) {
 // Set the current date and time
 function setDateTime() {
     let now = new Date();
-    now.setMinutes(now.getMinutes() + now.getTimezoneOffset() + 630);   // Set the timezone to Sri Lanka
+    now.setMinutes(now.getMinutes() + now.getTimezoneOffset() + 660);   // Set the timezone to Sri Lanka
     $('#orderDate').val(now.toISOString().split('T')[0] + 'T' + now.toISOString().split('T')[1].slice(0, 8));
 }
 
