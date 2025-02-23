@@ -15,9 +15,8 @@ function generateOrderId() {
         return;
     }
 
-    const lastId = lastRow.find("td:eq(1)").text(); // Get the last ID from the table
+    const lastId = lastRow.find("td:eq(0)").text().trim(); // Get the last ID from the table
     const num = parseInt(lastId.replace("ORD-", "")) + 1;
-
     $("#orderId").val(`ORD-${String(num).padStart(3, "0")}`);
 }
 
@@ -78,7 +77,7 @@ $('#itemCode').on('change', function () {
 });
 
 // Calculate total when order quantity changes
-$('#orderQty').on('input', function() {
+$('#orderQty').on('input', function () {
     const qty = parseInt($(this).val()) || 0;
     const price = parseFloat($('#itemPrice').val()) || 0;
     const total = qty * price;
@@ -91,13 +90,13 @@ function saveOrder() {
     const dateTime = $('#orderDate').val();
     const customerId = $('#customerId').val();
     const itemCode = $('#itemCode').val();
-    const qty = $('#qty').val();
-    const total = $('#price').val();
+    const qty = $('#orderQty').val();
+    const total = $('#totalPrice').val();
 
-    // if (!orderId || !dateTime || !customerId || !itemCode || !qty || !total) {
-    //     showAlert("error", "All fields are required!");
-    //     return;
-    // }
+    if (!orderId || !dateTime || !customerId || !itemCode || !qty || !total) {
+        showAlert("error", "All fields are required!");
+        return;
+    }
 
     const orderDTO = {
         orderId: orderId,
@@ -120,6 +119,7 @@ function saveOrder() {
             showAlert("success", "Order Placed Successfully!");
             fetchOrderTable();
             clearForm();
+            $('#orderConfirmModal').modal('hide');
         },
         error: function (error) {
             console.error("Error saving order:", error);
@@ -137,13 +137,16 @@ function fetchOrderTable() {
             $orderTable.empty();
             for (const order of response) {
                 for (const detail of order.orderDetails) {
+
+                    const unitPrice = detail.qty > 0 ? (detail.subTotal / detail.qty).toFixed(2) : 0;   // Calculate unit price, handle division by zero
+
                     $orderTable.append(`
                         <tr>
                             <td>${order.orderId}</td>
                             <td>${order.customerId}</td>
                             <td>${detail.itemCode}</td>
                             <td>${detail.qty}</td>
-                            <td>${detail.unitPrice}</td>
+                            <td>${unitPrice}</td>
                             <td>${detail.subTotal}</td>
                             <td>${order.dateTime}</td>
                         </tr>
