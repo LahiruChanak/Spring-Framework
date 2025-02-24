@@ -57,10 +57,11 @@ body {
 
 .btn-primary,
 .btn-secondary,
-.btn-danger {
+.btn-danger,
+.btn-success{
     border: none;
     border-radius: 12px;
-    padding: 10px;
+    padding: 8px 15px;
     font-weight: 500;
     transition: all 0.3s ease;
 }
@@ -75,7 +76,8 @@ body {
 
 .btn-primary:hover,
 .btn-secondary:hover,
-.btn-danger:hover {
+.btn-danger:hover,
+.btn-success:hover {
     transform: translateY(-2px);
 }
 
@@ -154,10 +156,6 @@ body {
     border: none !important;
     outline: none !important;
     box-shadow: none !important;
-}
-
-.disabled {
-    cursor: not-allowed !important;
 }
 
 @media (max-width: 768px) {
