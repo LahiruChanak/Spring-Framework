@@ -97,11 +97,12 @@ body {
 
 .table th {
     font-weight: 600;
-    color: #444;
+    color: #222;
     border-bottom: none;
 }
 
 .table td {
+    color: #333;
     vertical-align: middle;
 }
 
