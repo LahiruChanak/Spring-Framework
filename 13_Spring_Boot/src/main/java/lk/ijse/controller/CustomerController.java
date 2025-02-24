@@ -17,8 +17,7 @@ public class CustomerController {
     @PostMapping(path = "save")
     public ResponseUtil saveCustomer(@RequestBody CustomerDTO customerDTO) {
         customerService.saveCustomer(customerDTO);
-        return new ResponseUtil(201, "Customer Saved", null);
-
+        return new ResponseUtil(200, "Customer Saved Successfully", null);
     }
 
     @GetMapping("search/{id}")
@@ -29,19 +28,17 @@ public class CustomerController {
     @PutMapping("update")
     public ResponseUtil updateCustomer(@RequestBody CustomerDTO customerDTO) {
         customerService.updateCustomer(customerDTO);
-        return new ResponseUtil(200, "Customer Updated", null);
-
+        return new ResponseUtil(200, "Customer Updated Successfully", null);
     }
 
     @DeleteMapping("delete/{id}")
     public ResponseUtil deleteCustomer(@PathVariable String id) {
         customerService.deleteCustomer(id);
         return new ResponseUtil(200, "Customer Deleted Successfully", null);
-
     }
 
     @GetMapping("getAll")
     public ResponseUtil getAllCustomers() {
-        return new ResponseUtil(200, "Success", customerService.getAllCustomers());
+        return new ResponseUtil(200, "Retrieved Customers Successfully", customerService.getAllCustomers());
     }
 }

@@ -135,7 +135,7 @@ function fetchOrderTable() {
         success: function (response) {
             const $orderTable = $('#orderTable');
             $orderTable.empty();
-            for (const order of response) {
+            for (const order of response.data) {
                 for (const detail of order.orderDetails) {
 
                     const unitPrice = detail.qty > 0 ? (detail.subTotal / detail.qty).toFixed(2) : 0;   // Calculate unit price, handle division by zero

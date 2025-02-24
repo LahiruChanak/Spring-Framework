@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface OrderService {
 
-    boolean saveOrder(OrderDTO orderDTO);
+    void saveOrder(OrderDTO orderDTO);
 
     OrderDTO getOrderById(String orderId);
 

@@ -9,6 +9,7 @@ import lk.ijse.repository.ItemRepo;
 import lk.ijse.repository.OrderDetailsRepo;
 import lk.ijse.repository.OrdersRepo;
 import lk.ijse.service.OrderService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,37 +24,33 @@ import java.util.stream.Collectors;
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
-    private final OrdersRepo ordersRepo;
+    private OrdersRepo ordersRepo;
 
     @Autowired
-    private final OrderDetailsRepo orderDetailsRepo;
+    private OrderDetailsRepo orderDetailsRepo;
 
     @Autowired
-    private final ItemRepo itemRepo;
+    private ItemRepo itemRepo;
 
     @Autowired
-    public OrderServiceImpl(OrdersRepo ordersRepo, OrderDetailsRepo orderDetailsRepo, ItemRepo itemRepo) {
-        this.ordersRepo = ordersRepo;
-        this.orderDetailsRepo = orderDetailsRepo;
-        this.itemRepo = itemRepo;
-    }
+    private ModelMapper modelMapper;
 
     @Override
     @Transactional
-    public boolean saveOrder(OrderDTO orderDTO) {
+    public void saveOrder(OrderDTO orderDTO) {
         try {
             // Validation
             if (orderDTO == null || orderDTO.getOrderId() == null ||
-                    orderDTO.getOrderDetails() == null || orderDTO.getOrderDetails().isEmpty()) {
-                return false;
+                orderDTO.getOrderDetails() == null || orderDTO.getOrderDetails().isEmpty()) {
+                throw new RuntimeException("Invalid order data. Please check.");
             }
 
             if (ordersRepo.existsById(orderDTO.getOrderId())) {
-                return false;
+                throw new RuntimeException("Order ID already exists.");
             }
 
             if (!checkItemsInStock(orderDTO.getOrderDetails())) {
-                return false;
+                throw new RuntimeException("Items are out of stock.");
             }
 
             // Create Order
@@ -86,8 +83,8 @@ public class OrderServiceImpl implements OrderService {
             }
 
             order.setOrderDetails(orderDetails);
-            ordersRepo.save(order);
-            return true;
+            ordersRepo.save(modelMapper.map(order, Orders.class));
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,20 +96,12 @@ public class OrderServiceImpl implements OrderService {
     public boolean checkItemsInStock(List<OrderDetailDTO> orderDetails) {
         for (OrderDetailDTO detail : orderDetails) {
             Item item = itemRepo.findById(detail.getItemCode()).orElse(null);
+
             if (item == null || item.getQtyOnHand() < detail.getQty()) {
-                return false;
+                throw new RuntimeException("Item " + detail.getItemCode() + " is out of stock.");
             }
         }
         return true;
-    }
-
-    private OrderDetail createOrderDetail(OrderDetailDTO dto, Orders order) {
-        OrderDetail detail = new OrderDetail();
-        detail.setItemCode(dto.getItemCode());
-        detail.setQty(dto.getQty());
-        detail.setSubTotal(dto.getSubTotal());
-        detail.setOrder(order);
-        return detail;
     }
 
     @Override

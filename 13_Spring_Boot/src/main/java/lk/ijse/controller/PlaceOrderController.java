@@ -2,35 +2,31 @@ package lk.ijse.controller;
 
 import lk.ijse.dto.OrderDTO;
 import lk.ijse.service.OrderService;
+import lk.ijse.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/order")
 @CrossOrigin(origins = "*")
 public class PlaceOrderController {
 
-    private final OrderService orderService;
-
     @Autowired
-    public PlaceOrderController(OrderService orderService) {
-        this.orderService = orderService;
-    }
+    private OrderService orderService;
 
     @PostMapping("/save")
-    public Boolean saveOrder(@RequestBody OrderDTO orderDTO) {
-        return orderService.saveOrder(orderDTO);
+    public ResponseUtil saveOrder(@RequestBody OrderDTO orderDTO) {
+        orderService.saveOrder(orderDTO);
+        return new ResponseUtil(200, "Order Placed Successfully.", null);
     }
 
     @GetMapping("/getAll")
-    public List<OrderDTO> getAllOrders() {
-        return orderService.getAllOrders();
+    public ResponseUtil getAllOrders() {
+        return new ResponseUtil(200, "Retrieved Orders Successfully.", orderService.getAllOrders());
     }
 
     @GetMapping("/search/{id}")
-    public OrderDTO getOrderById(@PathVariable String id) {
-        return orderService.getOrderById(id);
+    public ResponseUtil getOrderById(@PathVariable String id) {
+        return new ResponseUtil(200, "Order Found Successfully", orderService.getOrderById(id));
     }
 }
