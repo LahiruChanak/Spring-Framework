@@ -9,7 +9,7 @@ public interface OrderService {
 
     boolean saveOrder(OrderDTO orderDTO);
 
-    OrderDTO getOrderByCode(String orderId);
+    OrderDTO getOrderById(String orderId);
 
     List<OrderDTO> getAllOrders();
 

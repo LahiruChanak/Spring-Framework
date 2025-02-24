@@ -29,8 +29,8 @@ public class PlaceOrderController {
         return orderService.getAllOrders();
     }
 
-    @GetMapping("/search/{code}")
-    public OrderDTO getOrderByCode(@PathVariable String code) {
-        return orderService.getOrderByCode(code);
+    @GetMapping("/search/{id}")
+    public OrderDTO getOrderById(@PathVariable String id) {
+        return orderService.getOrderById(id);
     }
 }

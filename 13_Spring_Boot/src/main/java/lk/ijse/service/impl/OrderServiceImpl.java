@@ -22,8 +22,13 @@ import java.util.stream.Collectors;
 @Transactional
 public class OrderServiceImpl implements OrderService {
 
+    @Autowired
     private final OrdersRepo ordersRepo;
+
+    @Autowired
     private final OrderDetailsRepo orderDetailsRepo;
+
+    @Autowired
     private final ItemRepo itemRepo;
 
     @Autowired
@@ -112,7 +117,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public OrderDTO getOrderByCode(String orderId) {
+    public OrderDTO getOrderById(String orderId) {
         return ordersRepo.findById(orderId)
                 .map(this::mapToDTO)
                 .orElse(null);

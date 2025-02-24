@@ -6,14 +6,14 @@ import java.util.List;
 
 public interface CustomerService {
 
-    public void saveCustomer(CustomerDTO customerDTO);
+    void saveCustomer(CustomerDTO customerDTO);
 
-    public void updateCustomer(CustomerDTO customerDTO);
+    void updateCustomer(CustomerDTO customerDTO);
 
-    public void deleteCustomer(String id);
+    void deleteCustomer(String id);
 
-    public CustomerDTO getCustomerById(String id);
+    CustomerDTO getCustomerById(String id);
 
-    public List<CustomerDTO> getAllCustomers();
+    List<CustomerDTO> getAllCustomers();
 
 }
