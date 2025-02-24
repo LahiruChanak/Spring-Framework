@@ -65,10 +65,11 @@
                 </div>
             </div>
 
-            <div class="d-flex justify-content-between align-items-center gap-3 mb-3">
+            <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
                 <div class="w-100">
                     <label for="orderQty" class="form-label">Order Quantity</label>
-                    <input type="number" class="form-control" id="orderQty" required/>
+                    <input type="number" class="form-control" id="orderQty" min="1" required/>
+                    <label id="orderQtyError" class="text-danger ms-2 d-none mt-1" style="font-size: 0.95rem"></label>
                 </div>
                 <div class="w-100">
                     <label for="totalPrice" class="form-label">Total Price</label>
@@ -77,8 +78,8 @@
             </div>
 
             <div class="d-flex justify-content-end align-items-center mt-">
-                <button type="button" class="btn btn-primary px-3" data-bs-toggle="modal"
-                        data-bs-target="#orderConfirmModal">
+                <button type="button" id="placeOrderBtn" class="btn btn-primary px-3" data-bs-toggle="modal"
+                        data-bs-target="#orderConfirmModal" disabled>
                     Place Order
                 </button>
             </div>

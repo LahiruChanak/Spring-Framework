@@ -90,10 +90,10 @@ function saveOrder() {
     const dateTime = $('#orderDate').val();
     const customerId = $('#customerId').val();
     const itemCode = $('#itemCode').val();
-    const qty = $('#orderQty').val();
+    const orderQty = $('#orderQty').val();
     const total = $('#totalPrice').val();
 
-    if (!orderId || !dateTime || !customerId || !itemCode || !qty || !total) {
+    if (!orderId || !dateTime || !customerId || !itemCode || !orderQty || !total) {
         showAlert("error", "All fields are required!");
         return;
     }
@@ -105,7 +105,7 @@ function saveOrder() {
         orderDetails: [{
             orderId: orderId,
             itemCode: itemCode,
-            qty: qty,
+            qty: orderQty,
             subTotal: total
         }]
     };
@@ -194,3 +194,38 @@ function clearForm() {
     $('#orderForm')[0].reset();
     setDateTime();
 }
+
+// check order qty
+$('#orderQty').on('input', function () {
+    const orderQty = $('#orderQty').val().trim();
+    const itemQty = $('#itemQty').val();
+
+    if (!orderQty || isNaN(orderQty)) {
+        $('#orderQtyError').removeClass('d-none').text("Please enter a valid quantity.");
+        $('#placeOrderBtn').attr('disabled', true);
+        return;
+    }
+
+    const orderQtyNum = parseInt(orderQty);
+    const itemQtyNum = parseInt(itemQty);
+
+    if (orderQtyNum <= 0) {
+        $('#orderQtyError')
+            .removeClass('d-none')
+            .html('<i class="hgi-stroke hgi-alert-circle align-middle"></i> Order quantity must be greater than 0.');
+        $('#placeOrderBtn').attr('disabled', true);
+        return;
+    }
+
+    if (orderQtyNum > itemQtyNum) {
+        $('#orderQtyError')
+            .removeClass('d-none')
+            .html('<i class="hgi-stroke hgi-alert-circle align-middle"></i> Insufficient quantity in stock!');
+        $('#placeOrderBtn').attr('disabled', true);
+    } else {
+        $('#orderQtyError').addClass('d-none').text("");
+        $('#placeOrderBtn').attr('disabled', false);
+    }
+});
+
+

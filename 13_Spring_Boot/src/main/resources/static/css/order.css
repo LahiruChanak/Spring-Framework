@@ -155,6 +155,10 @@ body {
     box-shadow: none !important;
 }
 
+.disabled {
+    cursor: not-allowed !important;
+}
+
 @media (max-width: 768px) {
     .container {
         padding: 1rem;
