@@ -16,10 +16,10 @@
 
     <link rel="stylesheet" href="../css/order.css">
 </head>
-<body>
-<div class="container">
-    <div class="form-card">
-        <form id="orderForm">
+<body class="position-relative">
+<div class="container-fluid">
+    <div class="form-card d-flex gap-5">
+        <form id="orderForm" class="w-50">
             <h2 class="text-center mb-4">Place Order</h2>
             <div class="d-flex justify-content-between align-items-center gap-3 mb-3">
                 <div class="w-100">
@@ -78,49 +78,90 @@
             </div>
 
             <div class="d-flex justify-content-end align-items-center mt-">
-                <button type="button" id="placeOrderBtn" class="btn btn-primary px-3" data-bs-toggle="modal"
-                        data-bs-target="#orderConfirmModal" disabled>
-                    <i class="hgi-stroke hgi-invoice-03 fs-4 align-middle me-2"></i> Place Order
+                <button type="button" class="btn btn-secondary px-3 me-2" id="addToCartBtn" disabled>
+                    <i class="hgi-stroke hgi-shopping-cart-add-02 fs-4 align-middle me-2"></i>
+                    Add to Cart
                 </button>
             </div>
         </form>
-        <div class="order-list mt-4">
-            <h3 class="text-center mb-4">Order List</h3>
-            <div class="table-responsive">
-                <table class="table table-borderless table-hover">
-                    <thead class="border-bottom border-dark">
-                    <tr>
-                        <th>Order ID</th>
-                        <th>Customer</th>
-                        <th>Item</th>
-                        <th>Quantity</th>
-                        <th>Price</th>
-                        <th>Total Price</th>
-                        <th>Order Date</th>
-                    </tr>
-                    </thead>
-                    <tbody id="orderTable">
-                    <!-- Dynamic order rows will be added here -->
-                    </tbody>
-                </table>
+        <div class="d-flex flex-column justify-content-between w-75">
+            <!-- Cart Table -->
+            <div class="cart-list my-4 pt-3 h-75">
+                <h3 class="text-center mb-4">Cart Items</h3>
+                <div class="table-responsive">
+                    <table class="table table-borderless table-hover">
+                        <thead class="border-bottom border-dark">
+                        <tr>
+                            <th>Item Code</th>
+                            <th>Item Name</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                            <th>Total</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody id="cartTable">
+                        <!-- Dynamic cart rows will be added here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end align-items-center gap-4">
+                <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                        data-bs-target="#orderHistoryModal">
+                    <i class="hgi-stroke hgi-shopping-basket-done-01 fs-4 align-middle me-2"></i>
+                    View Order History
+                </button>
+                <button type="button" id="placeOrderBtn" class="btn btn-primary px-3" data-bs-toggle="modal"
+                        data-bs-target="#orderConfirmModal" disabled>
+                    <i class="hgi-stroke hgi-invoice-03 fs-4 align-middle me-2"></i>
+                    Place Order
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order History Modal -->
+    <div class="modal fade" id="orderHistoryModal" data-bs-backdrop="static"
+         data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Order History</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="orderSearchInput" placeholder="Search orders..."/>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-borderless table-hover">
+                            <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Date</th>
+                                <th>Customer</th>
+                                <th>Items</th>
+                                <th>Total Amount</th>
+                            </tr>
+                            </thead>
+                            <tbody id="orderHistoryTable">
+                            <!-- Order history rows will be added here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Order Confirmation modal -->
-    <div
-            class="modal fade"
-            id="orderConfirmModal"
-            tabindex="-1"
-            data-bs-backdrop="static"
-            data-bs-keyboard="false"
-            aria-hidden="true"
-    >
+    <div class="modal fade" id="orderConfirmModal" tabindex="-1"
+         data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content py-3">
-                <div
-                        class="modal-header border-0 d-flex flex-column align-items-center"
-                >
+                <div class="modal-header border-0 d-flex flex-column align-items-center">
                     <div class="bg-success-subtle text-success fs-4 mb-2 alert-icon">
                         <i class="hgi-stroke hgi-alert-01 align-middle"></i>
                     </div>
@@ -129,22 +170,13 @@
                 <div class="modal-body text-center p-0 mb-2">
                     Are you sure you want to place this order?
                 </div>
-                <div
-                        class="modal-footer d-flex justify-content-center gap-3 border-0"
-                >
-                    <button
-                            type="button"
-                            class="btn btn-secondary bg-secondary-subtle text-black border-0 rounded-pill"
-                            data-bs-dismiss="modal"
-                    >
+                <div class="modal-footer d-flex justify-content-center gap-3 border-0">
+                    <button type="button" class="btn btn-secondary bg-secondary-subtle text-black border-0 rounded-pill"
+                            data-bs-dismiss="modal">
                         No, Cancel
                     </button>
-                    <button
-                            type="button"
-                            class="btn btn-success rounded-pill"
-                            id="confirmPlaceOrderBtn"
-                            onclick="saveOrder()"
-                    >
+                    <button type="button" class="btn btn-success rounded-pill" id="confirmPlaceOrderBtn"
+                            onclick="saveOrder()">
                         Yes, Place Order!
                     </button>
                 </div>
@@ -161,6 +193,18 @@
         </div>
     </div>
 </div>
+
+<!-- <div class="position-absolute top-0 end-0 mx-2">
+  <a
+    href="../../index.html"
+    class="home-btn"
+    data-bs-toggle="tooltip"
+    data-bs-title="Home"
+    data-bs-placement="left"
+  >
+    <i class="hgi-stroke hgi-home-01 fs-3"></i>
+  </a>
+</div> -->
 
 <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

@@ -1,6 +1,6 @@
 body {
     min-height: 100vh;
-    background: linear-gradient(135deg, #6b73ff 0%, #000dff 100%);
+    background: linear-gradient(135deg, #eef5ff 0%, #aabfe1 100%);
     display: flex;
     align-items: center;
     font-family: "Roboto", sans-serif;
@@ -14,18 +14,22 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-    background: #6b73ff;
+    background: #aabfe1;
     border-radius: 6px;
-    margin: 5px 0;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #121212;
+    background: #6b73ff;
     border-radius: 6px;
 }
 
 .container {
     max-width: 800px;
+}
+
+.home-btn {
+    text-decoration: none;
+    color: #222;
 }
 
 .form-card {
