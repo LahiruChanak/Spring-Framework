@@ -18,13 +18,14 @@
         <module name="12_Spring_Data_JPA" />
         <module name="04_Spring_FullMode_vs_LightMode" />
       </profile>
-      <profile name="Annotation profile for 13_Spring_Boot" enabled="true">
+      <profile name="Annotation profile for 14_Spring_Security" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar" />
         </processorPath>
+        <module name="Spring_Security" />
         <module name="Spring_Boot" />
       </profile>
     </annotationProcessing>
@@ -37,6 +38,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Spring_Boot" options="-parameters" />
+      <module name="Spring_Security" options="-parameters" />
     </option>
   </component>
 </project>
