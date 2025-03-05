@@ -10,7 +10,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
 /*
     In this code snippet, the security filter chain is configured to disable CSRF protection and to permit all
     requests to the "/customer" endpoint. The session management is also configured to use stateless sessions.
@@ -26,6 +25,5 @@ public class SecurityConfig {
 
         return http.build();
     }
-
 
 }
